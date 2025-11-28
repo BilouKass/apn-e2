@@ -1,0 +1,7 @@
+*.o
+*.output
+assign1
+assign2
+assign?_lexer.?
+assign?.?
+expr_lexer.*

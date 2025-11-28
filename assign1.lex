@@ -32,6 +32,8 @@ int yywrap() {
 ";"         return(SEMICOLON);
 "?"         return(INTERO);
 ":"         return(COLON);
+"_"         return(UNDERSCORE);
+"C"         return(COMBI);
 [\n\t ]*     /* throw away whitespace */
 .          { // Traiter chaque caractère inconnu comme un point virgule...
              return(SEMICOLON);

@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = table_symboles.h
-OBJS = table_symboles.o
+DEPS = table_symboles.h math_op.h
+OBJS = table_symboles.o math_op.o
 LIBS = -lm
 
 all: expr assign1 assign2
