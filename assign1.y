@@ -2,9 +2,12 @@
 #include <stdio.h>
 #include "table_symboles.h"
 #include "math_op.h"
+extern char *yytext;  // Déclaration ici
+extern int yylineno;
 int yyparse();
 int yylex();
 int yyerror(char *s);
+
 %}
 
 %union {
@@ -21,7 +24,7 @@ int yyerror(char *s);
 
 Source: Prog { print_symbols(); }
 
-Prog: Line SEMICOLON Prog {printf("%d\n", $1);}
+Prog: Line SEMICOLON Prog {}
     | {}
 
 Line: VAR ASSIGN Line {
@@ -31,7 +34,7 @@ Line: VAR ASSIGN Line {
     | Expr {$$ = $1;}
 
 Expr: Expr PLUS Term { $$ = $1 + $3; }
-    | Expr MINUS Term {$$ = $1 + $3; }
+    | Expr MINUS Term {$$ = $1 - $3; }
     | Term {$$ = $1; }
 
 Term: Term MULT Pow {$$ = $1 * $3;}
@@ -41,7 +44,7 @@ Term: Term MULT Pow {$$ = $1 * $3;}
 Pow: Bin EXPON Pow {$$ = powe($1, $3);}
    | Bin {$$ = $1;}
 
-Bin: COMBI EXPON Bin UNDERSCORE Fin {$$ = combi($3, $5);}
+Bin: COMBI EXPON Bin UNDERSCORE Fin {$$ = combi($5, $3);}
    | COMBI UNDERSCORE Bin EXPON Fin {$$ = combi($3, $5);}
    | Fin {$$ = $1;}
 
@@ -52,7 +55,8 @@ Fin: VAR {$$ = get_value($1);}
 %%
 
 int yyerror(char *s) {
-    fprintf(stderr, "Erreur: %s\n", s);
+    fprintf(stderr, "Erreur ligne %d: %s\n", yylineno, s);
+    fprintf(stderr, "Dernier token lu: %s\n", yytext);
     fprintf(stdout, "!!! ERREUR !!!\n");
     return 0;
 }
